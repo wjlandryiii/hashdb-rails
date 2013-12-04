@@ -1,13 +1,13 @@
-set :server 'appserver.local', roles: [:web, :app, :db]
+#server 'appserver.home', roles: [:web, :app, :db]
 
 set :application, 'hashdb'
-set :repo_url, 'git@katanza.local:~/hashdb.git'
+set :repo_url, 'git@katanza.home:~/hashdb.git'
 
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
-set :user, "deployer"
+#set :user, "deployer"
 
-set :deploy_to, "/home/#{user}/apps/#{application}"
+set :deploy_to, "/home/deployer/apps/hashdb"
 set :scm, :git
 
 # set :format, :pretty
