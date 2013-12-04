@@ -29,6 +29,22 @@ class Md5HashesController < ApplicationController
 		redirect_to md5_hashes_path
 	end
 
+	def uploadhashes
+		#just show html
+	end
+
+	def upload
+		upload = params[:upload]
+		datafile = upload[:datafile]
+		tmpfile = datafile.tempfile
+		while(hash = tmpfile.gets)
+			md5hash = Md5Hash.new()
+			md5hash.md5_value = hash.downcase
+			md5hash.save
+		end
+		redirect_to md5_hashes_path
+	end
+
 	def pastesolutions
 
 	end

@@ -5,6 +5,8 @@ Hashdb::Application.routes.draw do
   match 'md5_hashes/importsolutions' => 'md5_hashes#importsolutions'
   match 'md5_hashes/unsolved' => 'md5_hashes#unsolved'
   match 'md5_hashes/wordlist' => 'md5_hashes#wordlist'
+  match 'md5_hashes/uploadhashes' => 'md5_hashes#uploadhashes'
+  match 'md5_hashes/upload' => 'md5_hashes#upload'
   resources :md5_hashes
 
   match 'users/pasteuserhashes' => 'users#pasteuserhashes'
