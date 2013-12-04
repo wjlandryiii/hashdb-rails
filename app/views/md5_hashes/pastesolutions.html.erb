@@ -1,0 +1,7 @@
+<H1>PASTE Solutions!</H1>
+
+<%= form_tag(md5_hashes_importsolutions_path) do %>
+	<%= text_area_tag(:paste_string, "", :size => "150x50", :style => "font-family: monospace;") %><br/>
+	<%= submit_tag("Add") %>
+<% end %>
+	

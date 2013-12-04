@@ -1,0 +1,8 @@
+<H1>PASTE Username:Hashes!</H1>
+
+<%= form_tag(users_importuserhashes_path) do %>
+	Client Name: <%= text_field_tag(:client) %>
+	<br/>
+	<%= text_area_tag(:paste_string) %><br/>
+	<%= submit_tag("Add") %>
+<% end %>

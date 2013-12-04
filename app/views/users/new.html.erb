@@ -1,0 +1,13 @@
+<h1> NEW </h1>
+<%= form_for @user do |f| %>
+	<%= f.label :client %>
+	<%= f.text_field :client %>
+	<br/>
+	<%= f.label :name %>
+	<%= f.text_field :name %>
+	<br/>
+	<%= f.label :md5_hash_value %>
+	<%= f.text_field :md5_hash_value %>
+	<br/>
+	<%= f.submit %>
+<% end %>

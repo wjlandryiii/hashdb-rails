@@ -1,0 +1,22 @@
+<H1>Hashes: </H1>
+
+<ul>
+	<li><%= link_to "Upload new solutions", md5_hashes_pastesolutions_path %></li>
+	<li><%= link_to "Download all unsolved hashes", md5_hashes_unsolved_path %></li>
+	<li><%= link_to "Download wordlist", md5_hashes_wordlist_path %></li>
+</ul>
+<table>
+	<tr>
+		<th>hash</th>
+		<th>solved?</th>
+		<th>solution</th>
+	</tr>
+
+<% @md5hashes.each do |md5hash| %>
+	<tr>
+  		<td><pre><%= link_to md5hash.md5_value, md5_hash_path(md5hash) %></pre></td>
+  		<td><pre><%= md5hash.solved? ? "YES" : "NO" %></pre></td>
+  		<td><pre><%= md5hash.solution if md5hash.solved? %></pre></td>
+  	</tr>
+<% end %>
+</table>
