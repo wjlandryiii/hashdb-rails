@@ -9,9 +9,9 @@ group :development do
 	gem 'sqlite3'
 end
 
-group :productioin do
-	gem 'pg'
-end
+
+gem 'pg'
+
 
 
 # Gems used only for assets and not required
