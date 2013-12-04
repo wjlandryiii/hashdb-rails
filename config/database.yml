@@ -20,9 +20,9 @@ test:
 
 production:
   adapter: postgresql
+  host: localhost
   encoding: unicode
   database: hashdb_production
   pool: 5
-  timeout: 5000
-  user: hashdb
+  username: hashdb
   password: hashdbpassword
