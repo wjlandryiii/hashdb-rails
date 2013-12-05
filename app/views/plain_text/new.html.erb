@@ -1,25 +1,25 @@
 <h1> NEW </h1>
-<%= form_for @md5hash do |f| %>
-	<% if @md5hash.errors.any? %>
+<%= form_for @plainText do |f| %>
+	<% if @plainText.errors.any? %>
 		<div class="alert alert-danger">
 			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			The form contains <%= pluralize(@md5hash.errors.count, "error") %>.
+			The form contains <%= pluralize(@plainText.errors.count, "error") %>.
 			<ul>
-				<% @md5hash.errors.full_messages.each do |msg| %>
+				<% @plainText.errors.full_messages.each do |msg| %>
 					<li><%= msg %></li>
 				<% end %>
 			</ul>
 		</div>
 	<% end %>
-	<%= f.label :md5_value %>
-	<%= f.text_field :md5_value %>
+	<%= f.label :plainTextString %>
+	<%= f.text_field :plainTextString %>
 	<%= f.submit %>
 <% end %>
 
 
-<H1>PASTE Hashes!</H1>
+<H1>PASTE Plain Text</H1>
 
-<%= form_tag(md5_hashes_paste_path) do %>
+<%= form_tag(plain_texts_paste_path) do %>
 	<%= text_area_tag(:paste_string) %><br/>
 	<%= submit_tag("Add") %>
 <% end %>

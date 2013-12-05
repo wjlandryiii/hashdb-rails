@@ -1,0 +1,20 @@
+<h1>Plain Texts</h1>
+<ul>
+	<li><%= link_to "Submit new plain texts", plain_texts_new_path %></li>
+	<li><%= link_to "Download all plain texts", "#" %></li>
+</ul>
+
+<table class="table table-striped table-bordered monospaced">
+	<tr>
+		<th>Plain Text</th>
+		<th>MD5 Hash</th>
+	</tr>
+
+	<% @plainTexts.each do |plainText| %>
+		<tr>
+	  		<td><%= link_to plainText.plainTextString, plain_text_path(plainText) %></td>
+	  		<td><%= link_to plainText.md5_hash.md5_value, md5_hash_path(plainText.md5_hash) %></td>
+	  	</tr>
+	<% end %>
+</table>
+

@@ -1,17 +1,24 @@
 Hashdb::Application.routes.draw do
-  match 'md5_hashes/pastehashes' => 'md5_hashes#pastehashes'
-  match 'md5_hashes/importhashes' => 'md5_hashes#importhashes'
-  match 'md5_hashes/pastesolutions' => 'md5_hashes#pastesolutions'
-  match 'md5_hashes/importsolutions' => 'md5_hashes#importsolutions'
-  match 'md5_hashes/unsolved' => 'md5_hashes#unsolved'
-  match 'md5_hashes/wordlist' => 'md5_hashes#wordlist'
-  match 'md5_hashes/uploadhashes' => 'md5_hashes#uploadhashes'
-  match 'md5_hashes/upload' => 'md5_hashes#upload'
-  resources :md5_hashes
+  
+  get "plain_texts" => 'plain_text#index'
+  get "plain_texts/new" => 'plain_text#new'
+  post 'plain_texts' => 'plain_text#create'
+  post 'plain_texts/paste' => 'plain_text#paste', :as => :plain_texts_paste
+  post 'plain_texts/upload' => 'plain_text#upload', :as => :plain_texts_upload
+  get 'plain_texts/:id' => 'plain_text#show', :as => :plain_text
 
-  match 'users/pasteuserhashes' => 'users#pasteuserhashes'
-  match 'users/importuserhashes' => 'users#importuserhashes'
+  get 'md5_hashes' => 'md5_hashes#index', :as => :md5_hashes
+  get 'md5_hashes/new' => 'md5_hashes#new', :as => :md5_hashes_new
+  post 'md5_hashes' => 'md5_hashes#create', :as => :md5_hashes_create
+  post 'md5_hashes/paste' => 'md5_hashes#paste', :as => :md5_hashes_paste
+  post 'md5_hashes/upload' => 'md5_hashes#upload', :as => :md5_hashes_upload
+  get 'md5_hashes/unsolved' => 'md5_hashes#unsolved', :as => :md5_hashes_unsolved
+  get 'md5_hashes/stats' => 'md5_hashes#stats', :as => :md5_hashes_stats
+  get 'md5_hashes/:md5_value' => 'md5_hashes#show', :as => :md5_hash
+
+  
   resources :users
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -1,0 +1,2 @@
+module PlainTextHelper
+end

@@ -11,14 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130714095011) do
+ActiveRecord::Schema.define(:version => 20131205012422) do
 
   create_table "md5_hashes", :force => true do |t|
     t.string   "md5_value"
-    t.boolean  "solved",     :default => false, :null => false
+    t.boolean  "solved",        :default => false, :null => false
     t.string   "solution"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.integer  "plain_text_id"
+  end
+
+  create_table "plain_texts", :force => true do |t|
+    t.string   "plainTextString"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "users", :force => true do |t|

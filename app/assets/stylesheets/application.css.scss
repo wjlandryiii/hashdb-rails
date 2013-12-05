@@ -11,3 +11,9 @@
  *= require_self
  *= require_tree .
  */
+
+@import "bootstrap";
+
+.monospaced {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}

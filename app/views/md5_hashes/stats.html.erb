@@ -1,0 +1,15 @@
+<h2>Stats:</h2>
+<table class="table monospaced">
+	<tr>
+		<td>Total Hashes</td>
+		<td><span class="pull-right"><%= number_with_delimiter(@hashesCount) %></span></td>
+	</tr>
+	<tr>
+		<td>Hashed Solved</td>
+		<td><span class="pull-right"><%= number_with_delimiter(@hashesSolved) %></span></td>
+	</tr>
+	<tr>
+		<td>Percent Complete</td>
+		<td><span class="pull-right"><%= number_to_percentage((@hashesSolved + 0.0) / (@hashesCount + 0.0) * 100.0, precision: 0)   %></span></td>
+	</tr>
+</table>

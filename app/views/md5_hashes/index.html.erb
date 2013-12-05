@@ -1,23 +1,23 @@
 <H1>Hashes: </H1>
 
 <ul>
-	<li><%= link_to "Upload new solutions", md5_hashes_pastesolutions_path %></li>
+	<li><%= link_to "Submit new hashes", md5_hashes_new_path %></li>
 	<li><%= link_to "Download all unsolved hashes", md5_hashes_unsolved_path %></li>
-	<li><%= link_to "Download wordlist", md5_hashes_wordlist_path %></li>
-	<li><%= link_to "Upload hash list", md5_hashes_uploadhashes_path %></li>
+	<li><%= link_to "Stats", md5_hashes_stats_path %></li>
 </ul>
-<table>
+
+
+<h2>Recient Hashes:</h2>
+<table class="table table-striped table-bordered monospaced">
 	<tr>
-		<th>hash</th>
-		<th>solved?</th>
-		<th>solution</th>
+		<th>Hash</th>
+		<th>Plain Text</th>
 	</tr>
 
 <% @md5hashes.each do |md5hash| %>
-	<tr>
-  		<td><pre><%= link_to md5hash.md5_value, md5_hash_path(md5hash) %></pre></td>
-  		<td><pre><%= md5hash.solved? ? "YES" : "NO" %></pre></td>
-  		<td><pre><%= md5hash.solution if md5hash.solved? %></pre></td>
+	<tr class="<%= md5hash.plain_text != nil ? "success" : "" %>">
+  		<td><span class="monospaced"><%= link_to md5hash.md5_value, md5_hash_path(md5hash) %></span></td>
+  		<td><%= md5hash.plain_text == nil ? "unsolved" : link_to(md5hash.plain_text.plainTextString, plain_text_path(md5hash.plain_text)) %></td>
   	</tr>
 <% end %>
 </table>
