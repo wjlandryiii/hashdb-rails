@@ -57,7 +57,7 @@ class Md5HashesController < ApplicationController
 		upload = params[:upload]
 		datafile = upload[:datafile]
 		tmpfile = datafile.tempfile
-		while(password = tmpfile.gets)
+		while(hash = tmpfile.gets)
 			hashCount += 1
 			md5hash = Md5Hash.new()
 			hash.downcase!
