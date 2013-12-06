@@ -1,7 +1,7 @@
 <h1>hash:</h1>
-<pre><%= @md5hash.md5_value %></pre>
-<% if @md5hash.plain_text != nil %>
-	Solution: <pre><%= @md5hash.plain_text.plainTextString %></pre>
+<pre><%= @md5hash.hex_hash %></pre>
+<% if @md5hash.password != nil %>
+	Solution: <pre><%= @md5hash.password %></pre>
 <% else %>
 	UNSOLVED
 <% end %>

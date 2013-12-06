@@ -11,31 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131206034247) do
+ActiveRecord::Schema.define(:version => 20131206041728) do
 
   create_table "md5_hashes", :force => true do |t|
-    t.string   "md5_value"
+    t.string   "hex_hash"
+    t.string   "password"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
-  add_index "md5_hashes", ["md5_value"], :name => "index_md5_hashes_on_md5_value", :unique => true
-
-  create_table "plain_texts", :force => true do |t|
-    t.string   "plainTextString"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-    t.integer  "md5_hash_id"
-  end
-
-  add_index "plain_texts", ["plainTextString"], :name => "index_plain_texts_on_plainTextString", :unique => true
-
-  create_table "users", :force => true do |t|
-    t.string   "client"
-    t.string   "name"
-    t.string   "md5_hash_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
+  add_index "md5_hashes", ["hex_hash"], :name => "index_md5_hashes_on_hex_hash", :unique => true
+  add_index "md5_hashes", ["password"], :name => "index_md5_hashes_on_password", :unique => true
 
 end

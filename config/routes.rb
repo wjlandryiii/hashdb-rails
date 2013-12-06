@@ -1,20 +1,17 @@
 Hashdb::Application.routes.draw do
-  
-  get "plain_texts" => 'plain_text#index'
-  get "plain_texts/new" => 'plain_text#new'
-  post 'plain_texts' => 'plain_text#create'
-  post 'plain_texts/paste' => 'plain_text#paste', :as => :plain_texts_paste
-  post 'plain_texts/upload' => 'plain_text#upload', :as => :plain_texts_upload
-  get 'plain_texts/:id' => 'plain_text#show', :as => :plain_text
 
   get 'md5_hashes' => 'md5_hashes#index', :as => :md5_hashes
   get 'md5_hashes/new' => 'md5_hashes#new', :as => :md5_hashes_new
   post 'md5_hashes' => 'md5_hashes#create', :as => :md5_hashes_create
-  post 'md5_hashes/paste' => 'md5_hashes#paste', :as => :md5_hashes_paste
-  post 'md5_hashes/upload' => 'md5_hashes#upload', :as => :md5_hashes_upload
+  post 'md5_hashes/paste_hashes' => 'md5_hashes#paste_hashes', :as => :md5_hashes_paste_hashes
+  post 'md5_hashes/upload_hashes' => 'md5_hashes#upload_hashes', :as => :md5_hashes_upload_hashes
+  post 'md5_hashes/paste_passwords' => 'md5_hashes#paste_passwords', :as => :md5_hashes_paste_passwords
+  post 'md5_hashes/upload_passwords' => 'md5_hashes#upload_passwords', :as => :md5_hashes_upload_passwords
   get 'md5_hashes/unsolved' => 'md5_hashes#unsolved', :as => :md5_hashes_unsolved
+  get 'md5_hashes/wordlist' => 'md5_hashes#wordlist', :as => :md5_hashes_wordlist
   get 'md5_hashes/stats' => 'md5_hashes#stats', :as => :md5_hashes_stats
-  get 'md5_hashes/:md5_value' => 'md5_hashes#show', :as => :md5_hash
+  get 'md5_hashes/deleteall' => 'md5_hashes#deleteall', :as => :md5_hashes_deletall
+  get 'md5_hashes/:hex_hash' => 'md5_hashes#show', :as => :md5_hash
 
   
   resources :users

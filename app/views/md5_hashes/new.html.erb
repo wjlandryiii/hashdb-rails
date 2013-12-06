@@ -1,32 +1,27 @@
-<h1> NEW </h1>
-<%= form_for @md5hash do |f| %>
-	<% if @md5hash.errors.any? %>
-		<div class="alert alert-danger">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			The form contains <%= pluralize(@md5hash.errors.count, "error") %>.
-			<ul>
-				<% @md5hash.errors.full_messages.each do |msg| %>
-					<li><%= msg %></li>
-				<% end %>
-			</ul>
-		</div>
-	<% end %>
-	<%= f.label :md5_value %>
-	<%= f.text_field :md5_value %>
-	<%= f.submit %>
-<% end %>
+<h1>Submit Hashes</h1>
 
-
-<H1>PASTE Hashes!</H1>
-
-<%= form_tag(md5_hashes_paste_path) do %>
+<H2>Paste Hashes</H2>
+<%= form_tag(md5_hashes_paste_hashes_path) do %>
 	<%= text_area_tag(:paste_string) %><br/>
 	<%= submit_tag("Add") %>
 <% end %>
 
 
-<h1>File Upload</h1>
-  <%= form_tag({:action => 'upload'}, :multipart => true) do %>
+<h2>Upload Hash File</h2>
+  <%= form_tag(md5_hashes_upload_hashes_path, :multipart => true) do %>
+    <p><label for="upload_file">Select File</label>
+    <%= file_field 'upload', 'datafile' %></p>
+    <%= submit_tag "Upload" %>
+  <% end %>
+
+<H2>Paste Passwords</H2>
+<%= form_tag(md5_hashes_paste_passwords_path) do %>
+	<%= text_area_tag(:paste_string) %><br/>
+	<%= submit_tag("Add") %>
+<% end %>
+
+<h2>Upload Plain Text Passwords</h2>
+  <%= form_tag(md5_hashes_upload_passwords_path, :multipart => true) do %>
     <p><label for="upload_file">Select File</label>
     <%= file_field 'upload', 'datafile' %></p>
     <%= submit_tag "Upload" %>
