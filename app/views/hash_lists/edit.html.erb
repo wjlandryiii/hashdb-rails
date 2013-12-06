@@ -1,0 +1,18 @@
+<h1>Edit Hash List Information</h1>
+<ul>
+	<li><%= link_to "Create hash list", hash_lists_new_path %></li>
+
+</ul>
+
+<%= form_for(@hashList) do |f| %>
+	<!-- error messages here -->
+	<%= f.label :title %>
+	<%= f.text_field :title %>
+	</br>
+
+	<%= f.label :description %>
+	<%= f.text_area :description %>
+	</br>
+
+	<%= f.submit "Save", class: "btn btn-large btn-primary" %>
+<% end %>

@@ -1,6 +1,10 @@
 require 'digest/md5'
 
 class Md5HashesController < ApplicationController
+	def index
+		@md5hashes = Md5Hash.all(:order => 'updated_at DESC', :limit => 20)
+	end
+
 	def new
 
 	end
@@ -115,9 +119,7 @@ class Md5HashesController < ApplicationController
 		end
 	end
 
-	def index
-		@md5hashes = Md5Hash.all(:order => 'updated_at DESC', :limit => 20)
-	end
+
 
 	def unsolved
 		md5hashes = Md5Hash.where("password IS NULL")

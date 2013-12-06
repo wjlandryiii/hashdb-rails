@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131206041728) do
+ActiveRecord::Schema.define(:version => 20131206064344) do
+
+  create_table "hash_lists", :force => true do |t|
+    t.string   "title"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "md5_hashes", :force => true do |t|
     t.string   "hex_hash"

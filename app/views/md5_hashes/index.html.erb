@@ -17,7 +17,7 @@
 
 <% @md5hashes.each do |md5hash| %>
 	<tr class="<%= md5hash.password != nil ? "success" : "" %>">
-  		<td><span class="monospaced"><%= link_to md5hash.hex_hash, md5_hash_path(md5hash) %></span></td>
+  		<td><%= link_to md5hash.hex_hash, md5_hash_path(md5hash) %></td>
   		<td><%= md5hash.password == nil ? "unsolved" : md5hash.password %></td>
   	</tr>
 <% end %>

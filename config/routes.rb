@@ -2,7 +2,7 @@ Hashdb::Application.routes.draw do
 
   get 'md5_hashes' => 'md5_hashes#index', :as => :md5_hashes
   get 'md5_hashes/new' => 'md5_hashes#new', :as => :md5_hashes_new
-  post 'md5_hashes' => 'md5_hashes#create', :as => :md5_hashes_create
+#  post 'md5_hashes' => 'md5_hashes#create', :as => :md5_hashes_create
   post 'md5_hashes/paste_hashes' => 'md5_hashes#paste_hashes', :as => :md5_hashes_paste_hashes
   post 'md5_hashes/upload_hashes' => 'md5_hashes#upload_hashes', :as => :md5_hashes_upload_hashes
   post 'md5_hashes/paste_passwords' => 'md5_hashes#paste_passwords', :as => :md5_hashes_paste_passwords
@@ -12,6 +12,14 @@ Hashdb::Application.routes.draw do
   get 'md5_hashes/stats' => 'md5_hashes#stats', :as => :md5_hashes_stats
   get 'md5_hashes/deleteall' => 'md5_hashes#deleteall', :as => :md5_hashes_deletall
   get 'md5_hashes/:hex_hash' => 'md5_hashes#show', :as => :md5_hash
+
+  get 'hash_lists' => 'hash_lists#index', :as => :hash_lists
+  get 'hash_lists/new' => 'hash_lists#new', :as => :hash_lists_new
+  post 'hash_lists' => 'hash_lists#create', :as => :hash_lists_create
+  get 'hash_lists/:id' => 'hash_lists#show', :as => :hash_list
+  put 'hash_lists/:id' => 'hash_lists#update', :as => :hash_list_update
+  get 'hash_lists/:id/edit' => 'hash_lists#edit', :as => :hash_list_edit
+  delete 'hash_lists/:id' => 'hash_lists#destroy', :as => :hash_list_destory
 
   
   resources :users
