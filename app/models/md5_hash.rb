@@ -3,7 +3,7 @@ class Md5Hash < ActiveRecord::Base
   validates_uniqueness_of :md5_value
   VALID_MD5_REGEX = /\A([0-9]|[a-f]){32}\z/i
   validates :md5_value, format: {with: VALID_MD5_REGEX }
-  belongs_to :plain_text, class_name: "PlainText"
+  has_one :plain_text, class_name: "PlainText"
 
   def to_param
   	md5_value
