@@ -11,13 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131206230301) do
+ActiveRecord::Schema.define(:version => 20131208222234) do
 
   create_table "hash_list_hashes", :force => true do |t|
-    t.string   "hash_list_id"
-    t.string   "md5_hash_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.integer  "hash_list_id", :limit => 255
+    t.integer  "md5_hash_id",  :limit => 255
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   create_table "hash_lists", :force => true do |t|
