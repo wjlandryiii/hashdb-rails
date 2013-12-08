@@ -14,10 +14,10 @@
 ActiveRecord::Schema.define(:version => 20131208222234) do
 
   create_table "hash_list_hashes", :force => true do |t|
-    t.integer  "hash_list_id", :limit => 255
-    t.integer  "md5_hash_id",  :limit => 255
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.integer  "hash_list_id"
+    t.integer  "md5_hash_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "hash_lists", :force => true do |t|
