@@ -1,21 +1,28 @@
-<h1>Hash Lists</h1>
+<% provide(:title, "Hash Lists") %>
+<%= render 'hash_lists/header' %>
 
-<ul>
-	<li><%= link_to "hash lists", hash_lists_path %></li>
-	<li><%= link_to "Create hash list", hash_lists_new_path %></li>
+<div class="panel panel-default">
+	<div class="panel-body">
 
-</ul>
+		<ul>
+			<li><%= link_to "hash lists", hash_lists_path %></li>
+			<li><%= link_to "Create hash list", hash_lists_new_path %></li>
+		</ul>
 
-<table class="table table-striped table-bordered monospaced">
-	<tr>
-		<th>Hash Lists</th>
-		<th>Actions</th>
-	</tr>
+		<table class="table table-striped table-bordered monospaced">
+			<tr>
+				<th>Hash Lists</th>
+				<th>Actions</th>
+			</tr>
 
-<% @hashLists.each do |hashList| %>
-	<tr class="">
-  		<td><%= link_to hashList.title, hash_list_path(hashList) %></td>
-  		<td><%= link_to "[delete]", hashList, method: :delete, confirm: "You sure?", title: hashList.title %> | <%= link_to "[edit]", hash_list_edit_path(hashList) %></td>
-  	</tr>
-<% end %>
-</table>
+			<% @hashLists.each do |hashList| %>
+				<tr class="">
+			  		<td><%= link_to hashList.title, hash_list_path(hashList) %></td>
+			  		<td><%= link_to "[delete]", hashList, method: :delete, confirm: "You sure?", title: hashList.title %> | <%= link_to "[edit]", hash_list_edit_path(hashList) %></td>
+			  	</tr>
+			<% end %>
+		</table>
+	</div>
+</div>
+
+<%= render 'hash_lists/footer' %>

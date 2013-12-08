@@ -1,24 +1,42 @@
-<H1>Hashes: </H1>
+<% provide(:title, "MD5 Hashes") %>
+<%= render 'md5_hashes/header' %>
 
-<ul>
-	<li><%= link_to "Submit new hashes", md5_hashes_new_path %></li>
-	<li><%= link_to "Download all unsolved hashes", md5_hashes_unsolved_path %></li>
-	<li><%= link_to "Download all solutions", md5_hashes_wordlist_path %></li>
-	<li><%= link_to "Stats", md5_hashes_stats_path %></li>
-	<li><%= link_to "DELETE ALL HASHES", md5_hashes_deletall_path %></li>
-</ul>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h2>Recient Hashes:</h2>
+	</div>
+	
+	<div class="panel-body">
 
-<h2>Recient Hashes:</h2>
-<table class="table table-striped table-bordered monospaced">
-	<tr>
-		<th>Hash</th>
-		<th>Password</th>
-	</tr>
+		<%= will_paginate @md5hashes %>
+		
+		<table class="table monospaced">
+			<thead>
+				<th>Hash</th>
+				<th>Password</th>
+			</thead>
 
-<% @md5hashes.each do |md5hash| %>
-	<tr class="<%= md5hash.password != nil ? "success" : "" %>">
-  		<td><%= link_to md5hash.hex_hash, md5_hash_path(md5hash) %></td>
-  		<td><%= md5hash.password == nil ? "unsolved" : md5hash.password %></td>
-  	</tr>
-<% end %>
-</table>
+		<% @md5hashes.each do |md5hash| %>
+			<tr class="<%= md5hash.password != nil ? "success" : "" %>">
+		  		<td><%= link_to md5hash.hex_hash, md5_hash_path(md5hash) %></td>
+
+		  		<td><%= md5hash.password == nil ? "unsolved" : md5hash.password %></td>
+		  	</tr>
+		<% end %>
+
+
+		</table>
+
+	</div>
+
+
+	<div class="panel-footer">
+
+
+		
+
+	</div>
+
+</div>
+
+<%= render 'md5_hashes/footer' %>

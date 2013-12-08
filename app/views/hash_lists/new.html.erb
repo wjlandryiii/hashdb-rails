@@ -1,14 +1,24 @@
-<h1>New hash list</h1>
+<% provide(:title, "Hash Lists") %>
+<%= render 'hash_lists/header' %>
+<div class="panel panel-default">
+	<div class="panel-body">
 
-<%= form_for(@hashList) do |f| %>
-	<!-- error messages here -->
-	<%= f.label :title %>
-	<%= f.text_field :title %>
-	</br>
+	<h1>New hash list</h1>
 
-	<%= f.label :description %>
-	<%= f.text_area :description %>
-	</br>
+	<%= form_for(@hashList) do |f| %>
+		<!-- error messages here -->
+		<%= f.label :title %>
+		<%= f.text_field :title %>
+		</br>
 
-	<%= f.submit "Create", class: "btn btn-large btn-primary" %>
-<% end %>
+		<%= f.label :description %>
+		<%= f.text_area :description %>
+		</br>
+
+		<%= f.submit "Create", class: "btn btn-large btn-primary" %>
+	<% end %>
+
+	</div>
+</div>
+
+<%= render 'hash_lists/footer' %>

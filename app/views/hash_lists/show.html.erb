@@ -1,8 +1,46 @@
-<H1>Hash List</H1>
-<ul>
-	<li><%= link_to "hash lists", hash_lists_path %></li>
+<% provide(:title, "Hash List") %>
+<%= render 'hash_lists/header' %>
 
-</ul>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3><%= @hashList.title %></h3>
+	</div>
+	<div class="panel-body">
+
 
 Title: <%= @hashList.title %></br>
 Descriptioin: <%= @hashList.description %></br>
+
+<% if @hashCount > 0 %>
+	Hashes: <%= @hashCount %></br>
+	Hashes Solved <%= @hashesSolvedCount %></br>
+
+	<%= will_paginate @hashListHashes %>
+
+	<table class="table table-striped table-bordered monospaced">
+		<tr>
+			<th>Hash</th>
+			<th>solution</th>
+		</tr>
+
+		<% @hashListHashes.each do |hashListHash| %>
+			<tr>
+				<td><%= link_to hashListHash.md5_hash.hex_hash, hashListHash.md5_hash %></td>
+				<td><%= hashListHash.md5_hash.password if hashListHash.md5_hash.password != nil %></td>
+		<% end %>
+	</table>
+
+<% else %>
+	<h2>Upload Hash File</h2>
+  	<%= form_tag(hash_list_upload_hashlist_path, :multipart => true) do %>
+    	<p><label for="upload_file">Select File</label>
+    	<%= file_field 'upload', 'datafile' %></p>
+    	<%= submit_tag "Upload" %>
+  <% end %>
+<% end %>
+
+	</div>
+</div>
+
+<%= render 'hash_lists/footer' %>

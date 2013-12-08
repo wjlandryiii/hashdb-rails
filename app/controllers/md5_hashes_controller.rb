@@ -1,8 +1,38 @@
 require 'digest/md5'
+require 'pager'
 
 class Md5HashesController < ApplicationController
 	def index
-		@md5hashes = Md5Hash.all(:order => 'updated_at DESC', :limit => 20)
+		@md5hashes = Md5Hash.paginate(:page => params[:page])
+
+		# @pager = Pager.new(Md5Hash.count(), params[:page], 15)
+
+		# @itemsPerPage = 1
+		# @itemCount = Md5Hash.count
+		# @pageCount = @pager.pageCount() #@itemCount / @itemsPerPage + (@itemCount % @itemsPerPage == 0 ? 0 : 1)
+		# @page = params[:page].to_i
+		# @pageCountOffset = 0
+
+		# if @page == 0
+		# 	@pageCountOffset = 2
+		# elsif @page == 1
+		# 	@pageCountOffset = 1
+		# end
+
+		# if @page == @pageCount - 1
+		# 	@pageCountOffset = -2
+		# elsif @page == @pageCount - 2
+		# 	@pageCountOffset = -1
+		# end
+
+		# @pageItem0 = @page + @pageCountOffset - 2
+		# @pageItem1 = @page + @pageCountOffset - 1
+		# @pageItem2 = @page + @pageCountOffset
+		# @pageItem3 = @page + @pageCountOffset + 1
+		# @pageItem4 = @page + @pageCountOffset + 2
+
+		# #@md5hashes = Md5Hash.offset(@page*@itemsPerPage).limit(@itemsPerPage).reorder(:updated_at)
+		# @md5hashes = Md5Hash.offset(@pager.offset()).limit(@pager.limit()).reorder(:updated_at)
 	end
 
 	def new
@@ -95,6 +125,7 @@ class Md5HashesController < ApplicationController
 				if md5hash
 					solvedHashCount += 1
 					md5hash.password = password
+					md5hash.save
 				else
 					novelHashCount += 1
 					md5hash = Md5Hash.new

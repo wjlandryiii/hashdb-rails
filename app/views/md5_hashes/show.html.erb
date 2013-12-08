@@ -1,7 +1,16 @@
 <h1>hash:</h1>
-<pre><%= @md5hash.hex_hash %></pre>
+
+<%= render 'md5_hashes/header' %>
+
+
 <% if @md5hash.password != nil %>
-	Solution: <pre><%= @md5hash.password %></pre>
+	<div class="panel panel-success">
+		<div class="panel-heading">SOLVED</div>
+		<div class="panel-body"><code><%= @md5hash.hex_hash %></code>:<code><%= @md5hash.password %></code></div>
+	</div>
 <% else %>
-	UNSOLVED
+	<div class="panel panel-danger">
+		<div class="panel-heading">UNSOLVED</div>
+		<div class="panel-body"><code><%= @md5hash.hex_hash %></code>:</div>
+	</div>
 <% end %>

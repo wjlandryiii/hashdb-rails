@@ -20,7 +20,7 @@ Hashdb::Application.routes.draw do
   put 'hash_lists/:id' => 'hash_lists#update', :as => :hash_list_update
   get 'hash_lists/:id/edit' => 'hash_lists#edit', :as => :hash_list_edit
   delete 'hash_lists/:id' => 'hash_lists#destroy', :as => :hash_list_destory
-
+  post 'hash_list/:id/upload_hashlist' => 'hash_lists#upload_hashlist', :as => :hash_list_upload_hashlist
   
   resources :users
 

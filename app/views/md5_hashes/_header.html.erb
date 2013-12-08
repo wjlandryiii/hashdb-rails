@@ -1,0 +1,18 @@
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h2>MD5 Hashes</h2>
+
+
+<ul class="nav nav-pills">
+	<li class="<%= "active" if params[:action] == "index" %>"><%= link_to "index", md5_hashes_path %></li>
+	<li class="<%= "active" if params[:action] == "new" %>"><%= link_to "Submit new hashes", md5_hashes_new_path %></li>
+	<li class="<%= "active" if params[:action] == "stats" %>"><%= link_to "Stats", md5_hashes_stats_path %></li>
+	<li><%= link_to "Download all unsolved hashes", md5_hashes_unsolved_path %></li>
+	<li><%= link_to "Download all solutions", md5_hashes_wordlist_path %></li>
+	<li><%= link_to "DELETE ALL HASHES", md5_hashes_deletall_path %></li>
+</ul>
+
+  </div>
+
+  <div class="panel-body">

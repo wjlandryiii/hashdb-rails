@@ -1,28 +1,64 @@
-<h1>Submit Hashes</h1>
-
-<H2>Paste Hashes</H2>
-<%= form_tag(md5_hashes_paste_hashes_path) do %>
-	<%= text_area_tag(:paste_string) %><br/>
-	<%= submit_tag("Add") %>
-<% end %>
+<% provide(:title, "Submit Hashes") %>
+<%= render 'md5_hashes/header' %>
 
 
-<h2>Upload Hash File</h2>
-  <%= form_tag(md5_hashes_upload_hashes_path, :multipart => true) do %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Submit hashes</h3>
+  </div>
+  <div class="panel-body">
+    <%= form_tag(md5_hashes_paste_hashes_path, class: "form") do %>
+      <div class="form-group">
+        <label for="paste_string">Paste Hashes</label>
+        <%= text_area_tag(:paste_string, nil, class: "form-control monospaced", placeholder: "f97c5d29941bfb1b2fdab0874906ab82 b8a9f715dbb64fd5c56e7783c6820a61 35d6d33467aae9a2e3dccb4b6b027878", rows: 10) %><br/>
+        <%= submit_tag("Add", class: "btn btn-default") %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Upload Hash File</h3>
+  </div>
+  <div class="panel-body">
+    <%= form_tag(md5_hashes_upload_hashes_path, :multipart => true, class: "form") do %>
     <p><label for="upload_file">Select File</label>
     <%= file_field 'upload', 'datafile' %></p>
-    <%= submit_tag "Upload" %>
-  <% end %>
+    <%= submit_tag("Upload", class: "btn btn-default") %>
+    <% end %>
+  </div>
+</div>
 
-<H2>Paste Passwords</H2>
-<%= form_tag(md5_hashes_paste_passwords_path) do %>
-	<%= text_area_tag(:paste_string) %><br/>
-	<%= submit_tag("Add") %>
-<% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <H3>Paste Passwords</H3>
+  </div>
+  <div class="panel-body">
+    
+    <%= form_tag(md5_hashes_paste_passwords_path) do %>
+      <div class="form-group">
+      	<%= text_area_tag(:paste_string,nil, class: "form-control monospaced", placeholder: "love/sex/secret/god", rows: 10) %><br/>
+      	<%= submit_tag("Add", class: "btn btn-default") %>
+      </div>
+    <% end %>
+    
+  </div>
+</div>
 
-<h2>Upload Plain Text Passwords</h2>
-  <%= form_tag(md5_hashes_upload_passwords_path, :multipart => true) do %>
-    <p><label for="upload_file">Select File</label>
-    <%= file_field 'upload', 'datafile' %></p>
-    <%= submit_tag "Upload" %>
-  <% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <H3>Upload Plain Text Passwords</H3>
+  </div>
+  <div class="panel-body">
+    <%= form_tag(md5_hashes_upload_passwords_path, :multipart => true) do %>
+      <p><label for="upload_file">Select File</label>
+      <%= file_field 'upload', 'datafile' %></p>
+      <%= submit_tag "Upload", class: "btn btn-default" %>
+    <% end %>
+  </div>
+</div>
+
+
+<%= render 'md5_hashes/footer' %>
