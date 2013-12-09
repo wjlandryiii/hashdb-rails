@@ -39,48 +39,19 @@ class HashListsController < ApplicationController
 	def upload_hashlist
 		t1 = Time.now.to_f
 		@hashList = HashList.find(params[:id])
+		
 		if @hashList
-			hashCount = 0;
-			novelHashCount = 0;
-			savedHashCount = 0;
-			ActiveRecord::Base.transaction do
-				upload = params[:upload]
-				if(upload != nil)
-					datafile = upload[:datafile]
-					tmpfile = datafile.tempfile
-					while(hash = tmpfile.gets)
-						hash.force_encoding('UTF-8')
-						hash.chomp!
-					 	hash.downcase!
-					 	hash.strip!
-
-					 	if hash.length > 0
-					 		hashCount += 1
-						 	md5hash = Md5Hash.find_by_hex_hash(hash)
-						 	if !md5hash
-						 		novelHashCount += 1
-						 		md5hash = Md5Hash.new
-						 		md5hash.hex_hash = hash
-						 		#if !md5hash.save
-						 		#	md5hash = nil;
-						 		#end
-						 	end
-						 	if md5hash
-							 	hashListHash = HashListHash.new
-							 	hashListHash.hash_list = @hashList
-							 	hashListHash.md5_hash = md5hash
-							 	#if hashListHash.save
-							 	#	savedHashCount += 1
-							 	#end
-							end
-						end
-
-					end
-				end
+			upload = params[:upload]
+			if(upload != nil)
+				datafile = upload[:datafile]
+				tmpfile = datafile.tempfile
+				
+				HashList.import_from_file(@hashList, tmpfile)
 			end
 			t2 = Time.now.to_f
-			flash[:notice] = hashCount.to_s() + " hashes submitted.  " + savedHashCount.to_s() + " hashes added to list and " +novelHashCount.to_s() + " hashes were novel.  " + (t2-t1).to_s + " seconds."
+			flash[:notice] = (t2-t1).to_s + " seconds."
 			redirect_to hash_list_path @hashList
+			#render "show"
 		end
 	end
 

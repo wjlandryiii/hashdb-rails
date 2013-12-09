@@ -92,7 +92,7 @@ class Md5HashesController < ApplicationController
 		tmpfile = datafile.tempfile
 
 		t1 = Time.now.to_f
-		count = Md5Hash.import_from_file_C(tmpfile)
+		count = Md5Hash.import_from_file(tmpfile)
 		t2 = Time.now.to_f
 
 		flash[:notice] = count.to_s + " hashes in " + (t2 - t1).to_s + " seconds"

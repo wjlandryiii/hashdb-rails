@@ -13,18 +13,40 @@ class Md5Hash < ActiveRecord::Base
   class << self
 
     def import_hashes(hashes)
-      knownHashes = Set.new
-      hashesB = Set.new(hashes)
-      md5hashes = Md5Hash.select(:hex_hash).order(:hex_hash).find_all_by_hex_hash(hashes)
+      hashes.in_groups_of(1000, false) { | hash_chunk |
+        ActiveRecord::Base.transaction do
+          knownHashes = Set.new
+          md5hashes = Md5Hash.select(:hex_hash).order(:hex_hash).find_all_by_hex_hash(hash_chunk)
 
-      md5hashes.each do | hash |
-        knownHashes.add(hash.hex_hash)
-      end
+          md5hashes.each do | hash |
+            knownHashes.add(hash.hex_hash)
+          end
 
-      unKnownHashes = hashesB.subtract(knownHashes)
-      unKnownHashes = unKnownHashes.to_a()
-      unKnownHashes.map! { |x| [x]}
-      Md5Hash.import([:hex_hash], unKnownHashes, :validate => false)
+          newHashes = Set.new(hash_chunk)
+          unKnownHashes = newHashes.subtract(knownHashes).to_a()
+          unKnownHashes.map! {|x| [x]}
+          Md5Hash.import([:hex_hash], unKnownHashes, :validate => false)
+        end
+      }
+    end
+
+    def import_hashes_B(hashes)
+      connection = Md5Hash.connection()
+      hashes.in_groups_of(1000, false) { | hash_chunk |
+
+        knownHashes = Set.new
+        md5hashes = Md5Hash.select(:hex_hash).order(:hex_hash).find_all_by_hex_hash(hash_chunk)
+
+        md5hashes.each do | hash |
+          knownHashes.add(hash.hex_hash)
+        end
+
+        newHashes = Set.new(hash_chunk)
+        unKnownHashes = newHashes.subtract(knownHashes).to_a()
+        unKnownHashes.map! {|x| [x]}
+        Md5Hash.import([:hex_hash], unKnownHashes, :validate => false)
+
+      }
     end
 
 
@@ -44,28 +66,8 @@ class Md5Hash < ActiveRecord::Base
       hashes = hashes.to_a()
       hashes.sort!
 
-      hashes.in_groups_of(5000, false) { |hash_chunk|
-        Md5Hash.import_hashes(hash_chunk)
-      }
+      Md5Hash.import_hashes_B(hashes)
       count
     end
-
-
-  	def find_or_create_from_hex_hash(hex_hash)
-			hex_hash.strip!
-			hex_hash.downcase!
-			md5Hash = Md5Hash.find_by_md5_value(hex_hash)
-			if md5Hash == nil
-				md5Hash = Md5Hash.new
-				md5Hash.hex_hash = hex_hash
-				md5Hash.save!
-			end
-			return md5Hash
-  	end
-
-  	def find_or_create_from_password(s)
-  		hex_hash = Digest::MD5.hexdigest(s)
-  		return Md5Hash.find_or_create(hex_hash)
-  	end
   end
 end
