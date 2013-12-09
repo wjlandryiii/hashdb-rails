@@ -72,6 +72,7 @@ class Md5HashesController < ApplicationController
 				if md5hash
 					solvedHashCount += 1
 					md5hash.password = password
+					md5hash.save
 				else
 					novelHashCount += 1
 					md5hash = Md5Hash.new
@@ -86,22 +87,15 @@ class Md5HashesController < ApplicationController
 	end
 
 	def upload_hashes
-		hashCount = 0;
-		novelHashCount = 0;
 		upload = params[:upload]
 		datafile = upload[:datafile]
 		tmpfile = datafile.tempfile
-		while(hash = tmpfile.gets)
-			hashCount += 1
-			md5hash = Md5Hash.new()
-			hash.downcase!
-			hash.strip!
-			md5hash.hex_hash = hash
-			if md5hash.save
-				novelHashCount += 1
-			end
-		end
-		flash[:notice] = hashCount.to_s() + " hashes" + " submitted and " + novelHashCount.to_s() + " were novel."
+
+		t1 = Time.now.to_f
+		count = Md5Hash.import_from_file_C(tmpfile)
+		t2 = Time.now.to_f
+
+		flash[:notice] = count.to_s + " hashes in " + (t2 - t1).to_s + " seconds"
 		redirect_to md5_hashes_path
 	end
 
@@ -153,21 +147,35 @@ class Md5HashesController < ApplicationController
 
 
 	def unsolved
-		md5hashes = Md5Hash.where("password IS NULL")
-		txt = ""
-		md5hashes.each do |md5hash|
-			txt += md5hash.hex_hash + "\r\n"
-		end
+		t1 = Time.now.to_f
+
+		connection = ActiveRecord::Base.connection()
+		sql = "SELECT hex_hash FROM md5_hashes WHERE password IS NULL"
+		results = connection.execute(sql)
+		unsolved = results.map { |x| x["hex_hash"]}
+		txt = unsolved.join("\r\n")
+
+		t2 = Time.now.to_f
+		#txt +=  (t2-t1).to_s + "\r\n"
+
 		render text: txt, content_type:"text/plain"
 	end
 
 	def wordlist
-		md5hashes = Md5Hash.where("password IS NOT NULL")
-		txt = ""
-		md5hashes.each do |md5hash|
-			txt += md5hash.password + "\r\n"
-		end
+		t1 = Time.now.to_f
+
+		connection = ActiveRecord::Base.connection()
+		sql = "SELECT password FROM md5_hashes WHERE password IS NOT NULL"
+		results = connection.execute(sql)
+		passwords = results.map { |x| x["password"]}
+		txt = passwords.join("\r\n")
+
+		t2 = Time.now.to_f
+
+		#txt +=  (t2-t1).to_s + "\r\n"
 		render text: txt, content_type:"text/plain"
+
+
 	end
 
 	def stats
