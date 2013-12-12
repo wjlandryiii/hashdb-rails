@@ -1,3 +1,5 @@
+require 'csv'
+
 class Md5Hash < ActiveRecord::Base
   attr_accessible :hex_hash, :password
   validates_uniqueness_of :hex_hash
@@ -11,78 +13,24 @@ class Md5Hash < ActiveRecord::Base
   end
 
   class << self
+    
+    def import_hashes_E(hashes) #this is the ticket.  Imports eharmony.txt in about 60 second unchunked
+      connection = ActiveRecord::Base.connection.raw_connection
+      #hashes_csv = hashes.join("\r\n")
 
-    def import_hashes(hashes)
-      hashes.in_groups_of(1000, false) { | hash_chunk |
-        ActiveRecord::Base.transaction do
-          knownHashes = Set.new
-          md5hashes = Md5Hash.select(:hex_hash).order(:hex_hash).find_all_by_hex_hash(hash_chunk)
+      connection.exec("CREATE TEMPORARY TABLE IF NOT EXISTS tmp_hashes (hex_hash varchar(64)) ON COMMIT DELETE ROWS")
 
-          md5hashes.each do | hash |
-            knownHashes.add(hash.hex_hash)
-          end
-
-          newHashes = Set.new(hash_chunk)
-          unKnownHashes = newHashes.subtract(knownHashes).to_a()
-          unKnownHashes.map! {|x| [x]}
-          Md5Hash.import([:hex_hash], unKnownHashes, :validate => false)
+      hashes.in_groups_of(5000, false) do |hash_chunk|
+        hash_chunk = hash_chunk.map { |hash| "\"" + hash + "\""}
+        hashes_csv = hash_chunk.join("\r\n")
+        connection.transaction do
+          #connection.exec("CREATE UNIQUE INDEX tmp_hashes_hex_hash_index ON tmp_hashes (hex_hash)")  #this index does not inprove proformance
+          connection.exec("COPY tmp_hashes (hex_hash) FROM STDIN WITH csv" )
+          connection.put_copy_data(hashes_csv)
+          connection.put_copy_end
+          connection.exec("INSERT INTO md5_hashes (hex_hash) SELECT t.hex_hash FROM tmp_hashes t LEFT JOIN md5_hashes h ON h.hex_hash = t.hex_hash WHERE h.hex_hash IS NULL")
         end
-      }
-    end
-
-    def import_hashes_B(hashes)
-      connection = Md5Hash.connection()
-      hashes.in_groups_of(1000, false) { | hash_chunk |
-
-        knownHashes = Set.new
-        md5hashes = Md5Hash.select(:hex_hash).order(:hex_hash).find_all_by_hex_hash(hash_chunk)
-
-        md5hashes.each do | hash |
-          knownHashes.add(hash.hex_hash)
-        end
-
-        newHashes = Set.new(hash_chunk)
-        unKnownHashes = newHashes.subtract(knownHashes).to_a()
-        unKnownHashes.map! {|x| [x]}
-        Md5Hash.import([:hex_hash], unKnownHashes, :validate => false)
-
-      }
-    end
-
-    def import_hashes_C(hashes)
-      hashesSet = Set.new(hashes)
-      knownHashesSet = Set.new()
-
-      connection = ActiveRecord::Base.connection.raw_connection
-      connection.prepare("my_hash_findall_by_hex_hash", "SELECT id, hex_hash, password FROM md5_hashes WHERE hex_hash IN ($1)")
-
-
-      connection.exec("DEALLOCATE my_hash_findall_by_hex_hash")
-    end
-
-    def import_hashes_D(hashes)
-      connection = ActiveRecord::Base.connection.raw_connection
-      hashes_csv = hashes.join("\r\n")
-      connection.transaction do
-        connection.exec( "COPY md5_hashes (hex_hash) FROM STDIN WITH csv" )
-        connection.put_copy_data(hashes_csv)
-        connection.put_copy_end
       end
-    end
-
-    def import_hashes_E(hashes) #this is the ticket.  Imports eharmony.txt in about 60 seconds
-      connection = ActiveRecord::Base.connection.raw_connection
-      hashes_csv = hashes.join("\r\n")
-
-      connection.transaction do
-        connection.exec("CREATE TEMPORARY TABLE tmp_hashes (hex_hash varchar(64)) ON COMMIT DROP")
-        #connection.exec("CREATE UNIQUE INDEX tmp_hashes_hex_hash_index ON tmp_hashes (hex_hash)")  #this index does not inprove proformance
-        connection.exec("COPY tmp_hashes (hex_hash) FROM STDIN WITH csv" )
-        connection.put_copy_data(hashes_csv)
-        connection.put_copy_end
-        connection.exec("INSERT INTO md5_hashes (hex_hash) SELECT t.hex_hash FROM tmp_hashes t LEFT JOIN md5_hashes h ON h.hex_hash = t.hex_hash WHERE h.hex_hash IS NULL")
-      end
-
     end
 
     def import_from_file(file)
@@ -214,18 +162,44 @@ class Md5Hash < ActiveRecord::Base
       connection.exec("DEALLOCATE my_hash_create_bulk")
     end
 
+    def import_passwords_fast(passwords)
+      #passwordHashes = passwords.map{ |password| "\"" + password.gsub(",", "\\,") + "\",\"" + Digest::MD5.hexdigest(password).strip.downcase + "\"" }
+
+      passwordHashes = passwords.map do |password| 
+        #Rails.logger.debug(password)
+        "\"" + password.gsub(",", "\\,") + "\",\"" + Digest::MD5.hexdigest(password).strip.downcase + "\""
+      end
+
+      connection = ActiveRecord::Base.connection.raw_connection
+
+      #Rails.logger.debug(passwordHashes.join("\r\n"))
+      connection.exec("CREATE TEMP TABLE IF NOT EXISTS tmp_passwordhashes (password varchar(64), hex_hash varchar(64))")
+
+      connection.transaction do
+        connection.exec("COPY tmp_passwordhashes (password, hex_hash) FROM STDIN WITH csv" )
+        connection.put_copy_data(passwordHashes.join("\r\n"))
+        connection.put_copy_end
+        connection.exec("UPDATE md5_hashes SET password = t.password FROM tmp_passwordhashes t WHERE t.hex_hash = md5_hashes.hex_hash AND md5_hashes.password IS NULL")
+        connection.exec("INSERT INTO md5_hashes (hex_hash, password) SELECT t.hex_hash, t.password FROM tmp_passwordhashes t LEFT JOIN md5_hashes h ON h.hex_hash = t.hex_hash WHERE h.hex_hash IS NULL")
+      end
+
+    end
+
 
     def import_passwords(passwords)
-      Md5Hash.import_passwords_naive_solution2(passwords)
+      Md5Hash.import_passwords_fast(passwords)
     end
 
     def import_passwords_from_file(fileName)
       count = 0
+      #file = File.open(fileName, "r:ASCII-8BIT")
       file = File.open(fileName, "r:UTF-8")
-      Rails.logger.debug("File: " + file.to_s)
+      #Rails.logger.debug("File: " + file.to_s)
       passwords = Set.new
       while(password = file.gets)
         password.chomp!
+        Rails.logger.debug(password)
+        password.gsub(",", "\\,")
         count += 1
         passwords.add(password)
       end
@@ -239,8 +213,9 @@ class Md5Hash < ActiveRecord::Base
       connection = ActiveRecord::Base.connection.raw_connection
       buff = ''
       connection.transaction do
-        connection.exec "COPY (SELECT password FROM md5_hashes WHERE password IS NOT NULL) TO STDOUT CSV" 
+        connection.exec "COPY (SELECT password FROM md5_hashes WHERE password IS NOT NULL ORDER BY id) TO STDOUT CSV" 
         file.write(buff) while buff = connection.get_copy_data()
+        #Rails.logger.debug(buff.gsub("\xC3", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")) while buff = connection.get_copy_data()
       end
       file.flush()
     end

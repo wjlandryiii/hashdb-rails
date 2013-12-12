@@ -199,7 +199,7 @@ class Md5HashesController < ApplicationController
   end
 
   def wordlist_b
-    file = Tempfile.new("wordlist")
+    file = Tempfile.new("wordlist", :encoding => 'ascii-8bit')
     Rails.logger.debug(file)
     Md5Hash.export_passwords_to_file(file)
     send_file file.path, :type => 'text/plain', :filename => "wordlist.txt"
